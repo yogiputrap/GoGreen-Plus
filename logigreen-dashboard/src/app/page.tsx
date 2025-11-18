@@ -6,14 +6,18 @@ import {
   ArrowUpRight,
   BarChart3,
   BellRing,
+  CheckCircle,
   CircleAlert,
   Database,
   Fuel,
   Gauge,
+  Globe,
   Leaf,
   LineChart as LineChartIcon,
   MapPin,
   ShieldCheck,
+  X,
+  Zap,
 } from "lucide-react";
 import {
   Bar,
@@ -122,6 +126,147 @@ const dataSources = [
   },
 ];
 
+const followUpRecommendations = [
+  {
+    id: 1,
+    title: "Aktivasi Renewable Energy Certificates (RECs)",
+    description: "Menutup gap 0.8 mtCO₂e terhadap target 2030",
+    priority: "High",
+    estimatedImpact: "-0.8 mtCO₂e",
+    timeline: "Q4 2025",
+    actions: [
+      "Identifikasi supplier REC terpercaya",
+      "Negosiasi kontrak 2-tahun dengan pricing kompetitif",
+      "Integrasi dokumentasi REC ke sistem akuntansi karbon",
+    ],
+  },
+  {
+    id: 2,
+    title: "Program Supplier Low Carbon Action (SLCA)",
+    description: "Melibatkan 20 pemasok utama untuk pengurangan emisi Scope 3",
+    priority: "High",
+    estimatedImpact: "-1.2 mtCO₂e",
+    timeline: "Q1-Q2 2026",
+    actions: [
+      "Seleksi 20 pemasok terbesar berdasarkan kontribusi emisi",
+      "Workshop pelatihan sustainability best practices",
+      "Implementasi monitoring KPI bulanan per supplier",
+    ],
+  },
+  {
+    id: 3,
+    title: "Perluas Data Granular CDIP",
+    description: "Penelusuran emisi produk per pelanggan secara real-time",
+    priority: "Medium",
+    estimatedImpact: "Data Intelligence",
+    timeline: "Q2-Q3 2026",
+    actions: [
+      "Upgrade IoT sensor ke 150 lokasi tambahan",
+      "Integrasi API dengan sistem ERP pelanggan",
+      "Dashboard transparansi emisi per produk",
+    ],
+  },
+  {
+    id: 4,
+    title: "Scaling Fleet Electrification Wave 3",
+    description: "Meningkatkan adopsi EV dari 64% menjadi 75%",
+    priority: "High",
+    estimatedImpact: "-1.5 mtCO₂e",
+    timeline: "Q4 2025 - Q1 2026",
+    actions: [
+      "Procurement 200 unit EV generasi terbaru",
+      "Ekspansi charging infrastructure di 5 regional hub",
+      "Program insentif driver adoption",
+    ],
+  },
+];
+
+const apiServices = [
+  {
+    id: 1,
+    name: "Carbon Data API",
+    type: "Internal",
+    status: "Active",
+    description: "REST API untuk akses real-time data emisi dari CDIP",
+    endpoint: "/api/v1/carbon-data",
+    consumers: ["Dashboard", "Mobile App", "ERP System"],
+    documentation: "api.logigreen.local/docs/carbon-data",
+  },
+  {
+    id: 2,
+    name: "Supplier Integration API",
+    type: "External",
+    status: "Active",
+    description: "API untuk supplier partners mengirimkan data emisi berkala",
+    endpoint: "/api/v1/supplier-emissions",
+    consumers: ["Supplier Portal", "Third-party Systems"],
+    documentation: "api.logigreen.local/docs/supplier-integration",
+  },
+  {
+    id: 3,
+    name: "Compliance Reporting API",
+    type: "External",
+    status: "Planned",
+    description: "API untuk regulatory bodies mengakses laporan kepatuhan",
+    endpoint: "/api/v1/compliance-reports",
+    consumers: ["Regulatory Agencies", "Audit Partners"],
+    documentation: "Coming Q1 2026",
+  },
+  {
+    id: 4,
+    name: "Real-time Monitoring API",
+    type: "Internal",
+    status: "Development",
+    description: "WebSocket API untuk live tracking emisi dan IoT sensor data",
+    endpoint: "/api/v1/ws/realtime-monitoring",
+    consumers: ["Operations Center", "Alert System"],
+    documentation: "api.logigreen.local/docs/realtime",
+  },
+];
+
+const esgReports = [
+  {
+    id: 1,
+    name: "Annual ESG Report 2024",
+    type: "Public",
+    status: "Published",
+    regulatoryStandard: "GRI Standards 3-1, SASB, TCFD",
+    releaseDate: "2024-12-15",
+    scope: ["Scope 1, 2, 3 Emissions", "Energy", "Waste", "Water", "Labor Practices"],
+    accessibility: "https://reports.logigreen.id/esg-2024",
+  },
+  {
+    id: 2,
+    name: "Carbon Disclosure Project (CDP) Submission",
+    type: "External",
+    status: "In Preparation",
+    regulatoryStandard: "CDP Climate Change Module",
+    releaseDate: "2025-09-30",
+    scope: ["Climate Risk Assessment", "Emission Reduction Goals", "Supply Chain"],
+    accessibility: "Submission Portal",
+  },
+  {
+    id: 3,
+    name: "Net Zero Readiness Assessment",
+    type: "Internal",
+    status: "Quarterly",
+    regulatoryStandard: "Science Based Targets Initiative (SBTi)",
+    releaseDate: "Every Quarter",
+    scope: ["Target Progress", "Gap Analysis", "Strategic Initiatives"],
+    accessibility: "Internal Dashboard",
+  },
+  {
+    id: 4,
+    name: "Regulatory Compliance Report (Indonesia)",
+    type: "Government",
+    status: "Quarterly Submission",
+    regulatoryStandard: "Peraturan Pemerintah No. 70 Tahun 2021",
+    releaseDate: "30 Hari Setelah Akhir Kuartal",
+    scope: ["Emission Inventory", "Reduction Initiatives", "Technology Updates"],
+    accessibility: "Government Portal (SIMPIT)",
+  },
+];
+
 const executiveStatuses = [
   {
     name: "Target 2025",
@@ -148,7 +293,7 @@ const executiveStatuses = [
 
 type Tone = "positive" | "warning" | "critical";
 
-type TabKey = "cockpit" | "reporting";
+type TabKey = "cockpit" | "reporting" | "api-services" | "esg-hub";
 
 const tabs: { key: TabKey; label: string; description: string }[] = [
   {
@@ -160,6 +305,16 @@ const tabs: { key: TabKey; label: string; description: string }[] = [
     key: "reporting",
     label: "Reporting",
     description: "Analitik Detail ESG & Operasional",
+  },
+  {
+    key: "api-services",
+    label: "API Services",
+    description: "Integrasi Internal & External",
+  },
+  {
+    key: "esg-hub",
+    label: "ESG HUB",
+    description: "Laporan External & Kepatuhan",
   },
 ];
 
@@ -236,7 +391,7 @@ function formatMt(value: number) {
   return `${value.toLocaleString("id-ID", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} mtCO₂e`;
 }
 
-function CockpitView() {
+function CockpitView({ onOpenFollowUp }: { onOpenFollowUp: () => void }) {
   const reductionAchievement = emissionBaseline - totalEmission;
   const reductionTarget2025 = emissionBaseline - target2025;
   const reductionTarget2030 = emissionBaseline - target2030;
@@ -267,7 +422,7 @@ function CockpitView() {
                 </p>
               </div>
             </div>
-            <button className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-amber-200 transition hover:bg-amber-600">
+            <button onClick={onOpenFollowUp} className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-amber-200 transition hover:bg-amber-600">
               Rencana Tindak Lanjut
               <ArrowUpRight className="h-4 w-4" />
             </button>
@@ -499,6 +654,291 @@ function CockpitView() {
             <p className="text-xs text-slate-500">
               Perluasan kontrak biofuel untuk armada laut & udara guna mengejar gap 17% terhadap target 2030.
             </p>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+function ApiServicesView() {
+  return (
+    <div className="space-y-8">
+      <Card>
+        <div className="flex items-center gap-3">
+          <div className="rounded-2xl bg-sky-100 p-3 text-sky-600">
+            <Zap className="h-6 w-6" />
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold text-slate-900">API Services Platform</h3>
+            <p className="text-sm text-slate-500">Integrasi sistem internal dan eksternal untuk pertukaran data real-time</p>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-6">
+          {apiServices.map((api) => (
+            <div key={api.id} className="rounded-2xl border border-sky-100/70 bg-sky-50/40 p-6">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3">
+                    <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${
+                      api.type === "Internal"
+                        ? "bg-emerald-100 text-emerald-700"
+                        : "bg-sky-100 text-sky-700"
+                    }`}>
+                      {api.type}
+                    </span>
+                    <h3 className="text-lg font-semibold text-slate-900">{api.name}</h3>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-600">{api.description}</p>
+
+                  <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Status</p>
+                      <StatusBadge tone={api.status === "Active" ? "positive" : api.status === "Development" ? "warning" : "critical"}>
+                        {api.status}
+                      </StatusBadge>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Endpoint</p>
+                      <code className="mt-1 block text-xs font-mono text-slate-700 bg-white/60 rounded px-2 py-1">
+                        {api.endpoint}
+                      </code>
+                    </div>
+                    <div className="md:col-span-2">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Dokumentasi</p>
+                      <p className="mt-1 text-sm text-slate-600">{api.documentation}</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">Konsumen</p>
+                    <div className="flex flex-wrap gap-2">
+                      {api.consumers.map((consumer) => (
+                        <span key={consumer} className="inline-flex rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600">
+                          {consumer}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card>
+        <div className="flex items-center gap-3">
+          <div className="rounded-2xl bg-emerald-100 p-3 text-emerald-600">
+            <Database className="h-6 w-6" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-slate-900">Integration Guidelines</h3>
+            <p className="text-sm text-slate-500">Panduan implementasi untuk developer</p>
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <div className="rounded-2xl border border-emerald-100/70 bg-emerald-50/60 p-4">
+            <h4 className="font-semibold text-slate-900">Internal Integration</h4>
+            <ul className="mt-3 space-y-2 text-sm text-slate-600">
+              <li className="flex items-start gap-2">
+                <span className="mt-1 text-emerald-600">▪</span>
+                <span>Autentikasi via OAuth 2.0 dengan token akses 24 jam</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1 text-emerald-600">▪</span>
+                <span>Rate limiting: 10,000 requests/jam per aplikasi</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1 text-emerald-600">▪</span>
+                <span>Response format JSON dengan error handling standar</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="rounded-2xl border border-sky-100/70 bg-sky-50/60 p-4">
+            <h4 className="font-semibold text-slate-900">External Integration</h4>
+            <ul className="mt-3 space-y-2 text-sm text-slate-600">
+              <li className="flex items-start gap-2">
+                <span className="mt-1 text-sky-600">▪</span>
+                <span>API Key dengan IP whitelist untuk keamanan</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1 text-sky-600">▪</span>
+                <span>Rate limiting: 1,000 requests/jam per partner</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1 text-sky-600">▪</span>
+                <span>Webhook support untuk event-driven integration</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+function EsgHubView() {
+  return (
+    <div className="space-y-8">
+      <Card>
+        <div className="flex items-center gap-3">
+          <div className="rounded-2xl bg-emerald-100 p-3 text-emerald-600">
+            <Globe className="h-6 w-6" />
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold text-slate-900">ESG HUB - Laporan & Kepatuhan</h3>
+            <p className="text-sm text-slate-500">Manajemen laporan eksternal dan kepatuhan regulasi serta standar internasional</p>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-6">
+          {esgReports.map((report) => (
+            <div key={report.id} className="rounded-2xl border border-emerald-100/70 bg-white/80 p-6 shadow-sm shadow-emerald-200/40">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3">
+                    <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${
+                      report.type === "Public"
+                        ? "bg-emerald-100 text-emerald-700"
+                        : report.type === "External"
+                        ? "bg-sky-100 text-sky-700"
+                        : report.type === "Internal"
+                        ? "bg-slate-100 text-slate-700"
+                        : "bg-amber-100 text-amber-700"
+                    }`}>
+                      {report.type}
+                    </span>
+                    <h3 className="text-lg font-semibold text-slate-900">{report.name}</h3>
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Status</p>
+                      <StatusBadge tone={report.status === "Published" ? "positive" : report.status === "Quarterly Submission" ? "positive" : "warning"}>
+                        {report.status}
+                      </StatusBadge>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Rilis</p>
+                      <p className="mt-1 text-sm font-medium text-slate-900">{report.releaseDate}</p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Standar Regulasi</p>
+                      <p className="mt-1 text-sm text-slate-600">{report.regulatoryStandard}</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">Cakupan Laporan</p>
+                    <div className="flex flex-wrap gap-2">
+                      {report.scope.map((item) => (
+                        <span key={item} className="inline-flex rounded-full border border-emerald-200/70 bg-emerald-50/70 px-3 py-1 text-xs text-emerald-700">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">Aksesibilitas</p>
+                    <a href="#" className="inline-flex items-center gap-2 text-sm font-semibold text-sky-600 hover:text-sky-700 transition">
+                      {report.accessibility}
+                      <ArrowUpRight className="h-4 w-4" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card>
+          <div className="flex items-center gap-3">
+            <div className="rounded-2xl bg-sky-100 p-3 text-sky-600">
+              <ShieldCheck className="h-6 w-6" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900">Compliance Framework</h3>
+              <p className="text-sm text-slate-500">Kerangka kerja kepatuhan internasional</p>
+            </div>
+          </div>
+
+          <ul className="mt-6 space-y-3 text-sm text-slate-600">
+            <li className="flex items-start gap-2">
+              <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
+              <div>
+                <p className="font-semibold text-slate-900">GRI Standards</p>
+                <p className="text-xs text-slate-500">Global Reporting Initiative - Disclosure 3-1 & 3-2</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
+              <div>
+                <p className="font-semibold text-slate-900">SASB Standards</p>
+                <p className="text-xs text-slate-500">Sustainability Accounting Standards Board</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
+              <div>
+                <p className="font-semibold text-slate-900">TCFD Framework</p>
+                <p className="text-xs text-slate-500">Task Force on Climate-related Financial Disclosures</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
+              <div>
+                <p className="font-semibold text-slate-900">SBTi Initiative</p>
+                <p className="text-xs text-slate-500">Science-Based Targets Validation</p>
+              </div>
+            </li>
+          </ul>
+        </Card>
+
+        <Card>
+          <div className="flex items-center gap-3">
+            <div className="rounded-2xl bg-amber-100 p-3 text-amber-600">
+              <CircleAlert className="h-6 w-6" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900">Regulatory Calendar</h3>
+              <p className="text-sm text-slate-500">Jadwal kepatuhan regulasi utama</p>
+            </div>
+          </div>
+
+          <div className="mt-6 space-y-3">
+            <div className="rounded-2xl border border-amber-100/70 bg-amber-50/60 p-4">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="font-semibold text-amber-900">Q1 2026 - CDP Climate Submission</p>
+                  <p className="mt-1 text-xs text-amber-700">Batas: 31 Mei 2026</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-amber-100/70 bg-amber-50/60 p-4">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="font-semibold text-amber-900">Q4 2025 - Laporan Pemerintah</p>
+                  <p className="mt-1 text-xs text-amber-700">Batas: 30 Desember 2025</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-emerald-100/70 bg-emerald-50/60 p-4">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="font-semibold text-emerald-900">2026 Annual ESG Report</p>
+                  <p className="mt-1 text-xs text-emerald-700">Target: Desember 2026</p>
+                </div>
+              </div>
+            </div>
           </div>
         </Card>
       </div>
@@ -744,8 +1184,90 @@ function ImplementationPill({ title, description, progress, tone }: { title: str
   );
 }
 
+function FollowUpModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/50 backdrop-blur-sm">
+      <div className="relative w-full max-w-4xl rounded-3xl border border-emerald-200/60 bg-white/95 shadow-2xl">
+        <div className="flex items-center justify-between border-b border-emerald-100/60 px-8 py-6">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900">Rencana Tindak Lanjut</h2>
+            <p className="mt-1 text-sm text-slate-600">Usulan rencana rekomendasi untuk mencapai target emisi 2025 & 2030</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="rounded-full p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+          >
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+
+        <div className="max-h-[70vh] overflow-y-auto p-8">
+          <div className="space-y-6">
+            {followUpRecommendations.map((recommendation) => (
+              <div key={recommendation.id} className="rounded-2xl border border-emerald-100/70 bg-emerald-50/40 p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3">
+                      <div className={`rounded-full p-2 ${recommendation.priority === "High" ? "bg-rose-100 text-rose-600" : "bg-amber-100 text-amber-600"}`}>
+                        <CheckCircle className="h-5 w-5" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-slate-900">{recommendation.title}</h3>
+                    </div>
+                    <p className="mt-2 text-sm text-slate-600">{recommendation.description}</p>
+
+                    <div className="mt-4 grid grid-cols-3 gap-4 text-sm">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Prioritas</p>
+                        <StatusBadge tone={recommendation.priority === "High" ? "critical" : "warning"}>
+                          {recommendation.priority}
+                        </StatusBadge>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Estimasi Dampak</p>
+                        <p className="mt-1 font-semibold text-emerald-600">{recommendation.estimatedImpact}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Timeline</p>
+                        <p className="mt-1 font-semibold text-slate-900">{recommendation.timeline}</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4">
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Rencana Aksi</p>
+                      <ul className="space-y-2">
+                        {recommendation.actions.map((action, index) => (
+                          <li key={index} className="flex items-start gap-2 text-sm text-slate-600">
+                            <span className="mt-1 inline-flex h-2 w-2 flex-shrink-0 rounded-full bg-emerald-500" />
+                            {action}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="border-t border-emerald-100/60 px-8 py-4">
+          <button
+            onClick={onClose}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-500 px-6 py-2 text-sm font-semibold text-white shadow-sm shadow-emerald-500/30 transition hover:bg-emerald-600"
+          >
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabKey>("cockpit");
+  const [showFollowUpModal, setShowFollowUpModal] = useState(false);
 
   const mainClass = useMemo(
     () =>
@@ -800,8 +1322,13 @@ export default function Home() {
           })}
         </nav>
 
-        {activeTab === "cockpit" ? <CockpitView /> : <ReportingView />}
+        {activeTab === "cockpit" && <CockpitView onOpenFollowUp={() => setShowFollowUpModal(true)} />}
+        {activeTab === "reporting" && <ReportingView />}
+        {activeTab === "api-services" && <ApiServicesView />}
+        {activeTab === "esg-hub" && <EsgHubView />}
       </main>
+
+      <FollowUpModal isOpen={showFollowUpModal} onClose={() => setShowFollowUpModal(false)} />
     </div>
   );
 }
